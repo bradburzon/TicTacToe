@@ -43,7 +43,7 @@ public class View {
 		return "";
 	}
 	
-	public String printRules() {
+	public String printRulesandHelp() {
 		return "";
 	}
 }
