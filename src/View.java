@@ -1,6 +1,6 @@
 
 public class View {
-	/* Players will see this board, whose turn is it, and the score
+	/* Players will see this board printed, whose turn is it, and the score
 	 * --------------------------------------------
 	 * Player X's Turn 
 	 * 		[][][]			[1][2][3]
@@ -39,10 +39,15 @@ public class View {
 		model = m;
 	}
 	
+	/**
+	 * @return The string value that has the board, who is playing,and the score. 
+	 */
 	public String printBoard() {
 		return "";
 	}
-	
+	/**
+	 * @return The string value with the board along with rules and help stated above. 
+	 */
 	public String printRulesandHelp() {
 		return "";
 	}
