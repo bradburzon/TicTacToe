@@ -29,4 +29,53 @@ public class GameModel {
 		scores.put(player2, 0);
 		rulesAndHelp = "";
 	}
+
+	/**
+	 * @return the player1
+	 */
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	/**
+	 * @return the player2
+	 */
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	/**
+	 * @return the player1Moves
+	 */
+	public int[] getPlayer1Moves() {
+		return player1Moves;
+	}
+
+	/**
+	 * @return the player2Moves
+	 */
+	public int[] getPlayer2Moves() {
+		return player2Moves;
+	}
+
+	/**
+	 * @return the scores
+	 */
+	public HashMap<Player, Integer> getScores() {
+		return scores;
+	}
+
+	/**
+	 * @return the board
+	 */
+	public int[][] getBoard() {
+		return board;
+	}
+
+	/**
+	 * @return the rulesAndHelp
+	 */
+	public String getRulesAndHelp() {
+		return rulesAndHelp;
+	}
 }
