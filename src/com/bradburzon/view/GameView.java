@@ -16,10 +16,18 @@ public class GameView {
 		this.gameController = gameController;
 	}
 	
+	/**
+	 * Prints the tic tac toe board 
+	 * @return The string containing the board
+	 */
 	public String printBoard() {
 		return "";
 	}
 	
+	/**
+	 * Prints the rules and help
+	 * @return The string value of help
+	 */
 	public String printHelp(){
 		return "";
 	}
