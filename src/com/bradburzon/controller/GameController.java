@@ -28,7 +28,7 @@ public class GameController {
 	}
 	
 	/**
-	 * Resets the game including the board, score, and previous moves. 
+	 * Resets the game including the board, and previous moves. 
 	 */
 	public void resetGame() {
 		
@@ -44,10 +44,28 @@ public class GameController {
 	/**
 	 * Lets the currentPlayer to make a move on the board
 	 */
-	public void move() {
-		
+	public void makeAMove(int move) {
+	
 	}
 	
+	/**
+	 * 
+	 * @param move the position on the board
+	 * @return the x coord of the move
+	 */
+	public int getX(int move) {
+		return (int)Math.ceil((move - 1) / 3);
+	}
+	
+	/**
+	 * 
+	 * @param move the position on the board
+	 * @return the y coord of the move
+	 */
+	public int getY(int move, int xCoord) {
+		return (move - xCoord * 3) - 1;
+	}
+
 	/**
 	 * Swap the currentPlayer and nextPlayer
 	 */
