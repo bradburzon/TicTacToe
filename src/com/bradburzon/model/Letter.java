@@ -1,15 +1,16 @@
 package com.bradburzon.model;
 
-public enum Player {
+public enum Letter {
 	X('X'), O('O');
 	
 	private final char playerLetter;
 	
-	Player(char playerLetter) {
+	Letter(char playerLetter) {
 		this.playerLetter = playerLetter;
 	}
 	
 	public char asLetter() {
 		return playerLetter;
 	}
+
 }
