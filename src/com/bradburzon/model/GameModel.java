@@ -23,7 +23,18 @@ public class GameModel {
 		scores = new HashMap<Player, Integer>();
 		scores.put(player1, 0);
 		scores.put(player2, 0);
-		rulesAndHelp = "";
+		rulesAndHelp = " \nTicTacToe"
+				+ "\nThe object of Tic Tac Toe is to get three in a row."
+				+ "\nYou play on a three by three game board. The first player"
+				+ "\nis known as X and the second is O. Players alternate"
+				+ "\nplacing X's and O's on the game board until either opponent "
+				+ "\nhas three in a row or all nine squares are filled. "
+				+ "\n(http://web.cecs.pdx.edu/~bart/cs541-fall2001/homework/tictactoe-rules.html)\n"
+				+ "\nHelp(Press Enter after 1 key event)"
+				+ "\n1-9 to pick place on the board to place your letter and then press enter."
+				+ "\nH to bring out rules and help"
+				+ "\nR to reset the game"
+				+ "\nS to switch sides";
 		board = new char[3][3];
 	}
 
