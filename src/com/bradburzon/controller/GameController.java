@@ -1,15 +1,12 @@
 package com.bradburzon.controller;
 
-import java.util.Arrays;
-
 import com.bradburzon.model.GameModel;
 import com.bradburzon.model.Player;
+import com.bradburzon.view.GameView;
 
 /*
 GameController
  * As the game, I can choose to be player X or O.
- * **** 1 player or 2 player game? generate AI???
- * As the game, I can choose who goes first.
  * As the game, I should be able to check the status of the board.
  * As the game, I should be able to make a new game.
  * As the game, I should be able to reset the game.
@@ -18,46 +15,56 @@ GameController
 public class GameController {
 
 	private GameModel gameModel;
+	private GameView gameView;
 	private Player currentPlayer;
 
-	public GameController(GameModel gameModel) {
+	public GameController(GameModel gameModel, GameView gameView) {
 		this.gameModel = gameModel; //new GameModel(Player, Player)
+		this.gameView = gameView;
 		//initiate() need to ask what letter player 1 is
 		currentPlayer = gameModel.getPlayer1();
 	}
 
 	public GameController() {
-		this(new GameModel());
-	}
-	
-	/**
-	 * @return the gameModel
-	 */
-	public GameModel getGameModel() {
-		return gameModel;
+		this(new GameModel(), new GameView());
 	}
 
-	/**
-	 * @return the currentPlayer
-	 */
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
+	public void makeAMove(char move) throws IllegalArgumentException {
 
-	/**
-	 * @return the nextPlayer
-	 */
-	public Player getNextPlayer() {
-		if(gameModel.getPlayer1() == currentPlayer) {
-			return gameModel.getPlayer2();
+		if(Character.isDigit(move)) {
+			move(Character.getNumericValue(move));
+			if(checkBoardStatus() == 1) {
+				gameView.printWinner(this, currentPlayer.getLetter().asLetter());
+				gameModel.getScores().put(getCurrentPlayer(), gameModel.getScores().get(getCurrentPlayer()) + 1);
+				resetGame();
+			} else if(checkBoardStatus() == 2){
+				gameView.printTie();
+				resetGame();
+			} else {
+				switchPlayer();
+			}
+		} else if(Character.isLetter(move)) {
+			if(move == 'h') {
+				gameView.printHelp(this);
+			} else if(move == 'r') {
+				resetGame();
+			} else if(move == 's') {
+				if(currentPlayer.getTurn() == 0 && getNextPlayer().getTurn() == 0) {
+					switchPlayer();
+				} else {
+					throw new IllegalArgumentException("***Cannot switch in the middle of the game!");
+				}
+			} else {
+				throw new IllegalArgumentException("***Move is illegal.");
+			}
 		}
-		return gameModel.getPlayer1();
+
 	}
 
 	/**
 	 * Lets the currentPlayer to make a move on the board
 	 */
-	public void makeAMove(int move) throws IllegalArgumentException { 
+	public void move(int move) throws IllegalArgumentException { 
 		if(move >= 1 && move <= 9 &&!moveExist(move)){	//out of bounds 
 			int x = getX(move);
 			int y = getY(move, x);
@@ -65,31 +72,9 @@ public class GameController {
 			currentPlayer.getMoves()[turn] = move;
 			currentPlayer.setTurn(turn + 1);
 			gameModel.getBoard()[x][y] = currentPlayer.getLetter().asLetter();
-			switchPlayer();
 		} else {
-			throw new IllegalArgumentException("Move is illegal.");
+			throw new IllegalArgumentException("***Move is OUT-OF-BOUNDS or AlREADY TAKEN");
 		}
-	}
-
-	/**
-	 * Resets the game including the board, and previous moves. 
-	 */
-	public void resetGame() {
-		char[][] newBoard =new char[3][3];
-			gameModel.setBoard(newBoard);
-			gameModel.getPlayer1().setTurn(0);
-			gameModel.getPlayer2().setTurn(0);
-			int[] moves = new int[] {-1, -1, -1, -1, -1};
-			gameModel.getPlayer1().setMoves(moves);
-			gameModel.getPlayer2().setMoves(moves);
-			currentPlayer = gameModel.getPlayer1();
-	}
-
-	/**
-	 * Creates a new game while keeping the score....
-	 */
-	public void newGame() {
-
 	}
 
 	/**
@@ -130,6 +115,21 @@ public class GameController {
 	}
 
 	/**
+	 * Resets the game including the board, and previous moves. 
+	 */
+	public void resetGame() {
+		char[][] newBoard =new char[3][3];
+		gameModel.setBoard(newBoard);
+		gameModel.getPlayer1().setTurn(0);
+		gameModel.getPlayer2().setTurn(0);
+		int[] moves1 = new int[] {-1, -1, -1, -1, -1};
+		int[] moves2 = new int[] {-1, -1, -1, -1, -1};
+		gameModel.getPlayer1().setMoves(moves1);
+		gameModel.getPlayer2().setMoves(moves2);
+		currentPlayer = gameModel.getPlayer1();
+	}
+
+	/**
 	 * Swap the currentPlayer and nextPlayer
 	 */
 	public void switchPlayer() {
@@ -137,11 +137,34 @@ public class GameController {
 	}
 
 	/**
+	 * @return the currentPlayer
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * @return the nextPlayer
+	 */
+	public Player getNextPlayer() {
+		if(gameModel.getPlayer1() == currentPlayer) {
+			return gameModel.getPlayer2();
+		}
+		return gameModel.getPlayer1();
+	}
+
+	/**
 	 * Checks if there is a winner or not
 	 * @return The status of the board if one of the player has won or there is no winner
 	 */
-	public boolean checkBoardStatus(){
-		return checkWin(currentPlayer);
+	public int checkBoardStatus(){
+		if(checkWin(currentPlayer)) {
+			return 1;
+		} else if(currentPlayer.getTurn() + getNextPlayer().getTurn() == 9) {
+			return 2;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -169,12 +192,9 @@ public class GameController {
 		}else if (containsAll(moves, 1, 5, 9)) {
 			won = true;
 		}
-		if(won) {
-			gameModel.getScores().put(currPlayer, gameModel.getScores().get(currPlayer) + 1);
-		}
 		return won;
 	}
-	
+
 	/**
 	 * checks if i j k are inside the array moves
 	 * @param moves int[]
@@ -204,4 +224,19 @@ public class GameController {
 		}
 		return false;
 	}
+
+	/**
+	 * @return the gameModel
+	 */
+	public GameModel getGameModel() {
+		return gameModel;
+	}
+
+	/**
+	 * @return the gameView
+	 */
+	public GameView getGameView() {
+		return gameView;
+	}
+
 }
