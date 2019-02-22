@@ -9,23 +9,19 @@ import com.bradburzon.view.GameView;
 public class MainApp {
 
 	GameController gameController;
-	GameView gameView;
-	GameModel gameModel;
 
 	public MainApp() {
-		gameModel = new GameModel();
-		gameController = new GameController(gameModel);
-		gameView = new GameView(gameController);
+		gameController = new GameController(new GameModel(), new GameView());
 	}
 
 	/**
 	 * initiate the game
 	 */
 	public void play() {
-		gameView.printBoard();
+		gameController.getGameView().printBoard(gameController);
 		userInput();
 	}
-	
+
 	/**
 	 * asks user for input and takes the first character
 	 * 1-9 - valid move
@@ -37,39 +33,21 @@ public class MainApp {
 	private void userInput() {
 		Scanner input = new Scanner(System.in);
 		try {
-			if(input.hasNextInt()) {
-				gameController.makeAMove(input.nextInt());
-				if(gameController.checkWin(gameController.getNextPlayer())) {
-					gameView.printWinner(gameController.getNextPlayer().getLetter().asLetter());
-					gameController.resetGame();
-					play();
-				} else {
-					play();
-				}
-			} else {
+			while(input.hasNext()) {
 				char c = input.next().charAt(0);
-				if(c == 'q') {
-					gameView.printScore();
-				} else if(c == 'r') {
-					gameController.resetGame();
-					System.out.println("\nGAME RESETTED\n");
+				if (c != 'q') {
+					gameController.makeAMove(c);
 					play();
-				} else if(c == 'h') {
-					gameView.printHelp();
-					play();
-				} else if(c == 's') {;
-					gameController.switchPlayer();
-					play();
-				} else {
-					userInput();
 				}
-			}
-		} catch(Exception e) {
-			System.out.println("\n***" + e.getMessage());
+			}	
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			play();
 		}
 		input.close();
 	}
+
+
 
 	public static void main(String[] args) {
 		MainApp ticTacToe = new MainApp();
