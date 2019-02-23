@@ -1,6 +1,6 @@
-# Project Title
+# Tic Tac Toe
 
-A terminal based game for Tic Tac Toe.
+A terminal based game for Tic Tac Toe using Model-View-Controller design pattern.
 
 ## Getting Started
 
@@ -24,29 +24,25 @@ And for Eclipse, go to [Eclipse Packages](https://www.eclipse.org/downloads/pack
 If you are just running Java, just download [this](https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-developers).
 You can always install more software to fit your needs later.
 
+## Running the app
+
+```
+git clone https://github.com/bradburzon/TicTacToe.git
+```
+After this you need to go into the source directory and copy the javac to compile all necessary files. 
+Lastly, run the java code to play the game. 
+
+```
+cd TicTacToe/src
+javac com/bradburzon/model/Letter.java com/bradburzon/model/Player.java com/bradburzon/model/GameModel.java com/bradburzon/view/GameView.java  com/bradburzon/controller/GameController.java com/bradburzon/mainapp/MainApp.java
+
+java com.bradburzon.mainapp.MainApp
+```
+Enjoy!
+
 ## Running the tests
 
-Using Model-View-Controller design pattern, most of my logic are in Controller and ....
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-TODO
+Using Model-View-Controller design pattern, most of my logic are in Controller so run GameControllerTest.java in tst/com/bradburzon/controller. 
 
 ## Built With
 
@@ -66,7 +62,7 @@ TODO
 * etc
 
 
-#USER STORIES
+# USER STORIES
 
 PlayerModel
 * As a player, I should be able to keep my character.

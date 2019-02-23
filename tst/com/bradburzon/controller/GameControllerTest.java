@@ -1,7 +1,5 @@
 package com.bradburzon.controller;
 import java.util.Arrays;
-import java.util.stream.IntStream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -67,6 +65,12 @@ public class GameControllerTest {
 		Assertions.assertEquals(expected, actual);
 	}
 
+	/**
+	 * Returns different board status based on the board
+	 * 0 - Board is playable
+	 * 1 - One player has won and board needs to reset
+	 * 2 - Tie game and board is unplayable, need reset.
+	 */
 	@Test
 	void checkBoardStatus_returnCorrectNumberAccordingToGameState() {
 		gameController = new GameController(new GameModel(), new GameView());
@@ -82,6 +86,9 @@ public class GameControllerTest {
 		Assertions.assertEquals(2, gameController.checkBoardStatus());
 	}
 
+	/**
+	 * Checks if switches Player switches player accordingly
+	 */
 	@Test
 	void switchPlayer_switchesToNexPlayer() {
 		Player first = new Player(Letter.X);
@@ -99,8 +106,14 @@ public class GameControllerTest {
 		Assertions.assertEquals(second, gameController.getCurrentPlayer());
 	}
 
+	/**
+	 * Tests if given move on the board is out of bounds and throws exception
+	 *
+	 * @throws IllegalArgumentException move is illegal
+	 */
+
 	@Test
-	void move_throwExceptionOutOfBounds() {
+	void move_throwExceptionOutOfBounds() throws IllegalArgumentException {
 		gameController = new GameController(new GameModel(), new GameView());
 
 		// CHECK FOR OUT OF BOUNDS
@@ -123,6 +136,10 @@ public class GameControllerTest {
 		Assertions.assertEquals('O', gameController.getGameModel().getBoard()[2][2]);
 	}
 
+	/**
+	 * Tests if move is taken already and throw exception
+	 * @throws IllegalArgumentException move is illegal
+	 */
 	@Test 
 	void move_throwExceptionMoveAlreadyExist() throws Exception {
 		gameController = new GameController (new GameModel(), new GameView());
@@ -183,6 +200,9 @@ public class GameControllerTest {
 		gameController.switchPlayer();
 	}
 
+	/**
+	 * Tests if move stores the turn of each play
+	 */
 	@Test 
 	void move_KeepTrackOfTurnCorrectly() throws Exception {
 		gameController = new GameController(new GameModel(), new GameView());
@@ -254,92 +274,71 @@ public class GameControllerTest {
 		gameController.switchPlayer();
 	}
 
+	/**
+	 * Tests if move stores player moves accordingly and correctly
+	 */
 	@Test
-	void move_storeMovesCorrectly(){
+	void move_storeMovesAndInTheRightOrder(){
 		gameController = new GameController(new GameModel(), new GameView());
 
 		int move = 1;
-		int[] moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move)); //Make sure its not stored
 		gameController.move(move);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move)); //Make sure it is stored
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move));
+		int playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move, playerMove); //Make sure it is stored in the right
 		gameController.switchPlayer();
 
 		int move2 = 2;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move2));
 		gameController.move(move2);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move2));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move2));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move2, playerMove);
 		gameController.switchPlayer();
 
 		int move3 = 3;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move3));
 		gameController.move(move3);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move3));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move3));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move3, playerMove);
 		gameController.switchPlayer();
 
 		int move4 = 4;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move4));
 		gameController.move(move4);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move4));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move4));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move4, playerMove);
 		gameController.switchPlayer();
 
 		int move5 = 5;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move5));
 		gameController.move(move5);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move5));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move5));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move5, playerMove);
 		gameController.switchPlayer();
 
 		int move6 = 6;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move6));
 		gameController.move(move6);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move6));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move6));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move6, playerMove);
 		gameController.switchPlayer();
 
 		int move7 = 7;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move7));
 		gameController.move(move7);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move7));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move7));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move7, playerMove);
 		gameController.switchPlayer();
 
 		int move8 = 8;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move8));
 		gameController.move(move8);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move8));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move8));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move8, playerMove);
 		gameController.switchPlayer();
 
 		int move9 = 9;
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertFalse(IntStream.of(moves).anyMatch(x -> x == move9));
 		gameController.move(move9);
-		moves = gameController.getCurrentPlayer().getMoves();
-		Assertions.assertTrue(IntStream.of(moves).anyMatch(x -> x == move9));
-		Assertions.assertFalse(IntStream.of(gameController.getNextPlayer().getMoves()).anyMatch(x -> x == move9));
+		playerMove = gameController.getCurrentPlayer().getMoves()[gameController.getCurrentPlayer().getTurn()-1];
+		Assertions.assertEquals(move9, playerMove);
 		gameController.switchPlayer();
 	}
 
+	/**
+	 * Tests to see move puts the player Letter in the right spot
+	 */
 	@Test
 	void move_populateASpaceInTheBoardCorrectly() {
 		gameController = new GameController(new GameModel(), new GameView());
@@ -358,16 +357,72 @@ public class GameControllerTest {
 		gameController.switchPlayer();
 	}
 
+	/**
+	 * Tests the checkwin if it returns true for all winning set of moves and false for non winner
+	 */
 	@Test
 	void checkWin_returnTrueWhenOnePlayerWins(){
 		gameController = new GameController(new GameModel(), new GameView());
-		int[] lose = new int[] {1, 3, 5, -1, -1};
-		int[] win = new int[] {7, 8, 9, 4, -1};
+		int[] lose = new int[] {7, 6, 5, -1, -1};
+		int[] win = new int[] {1, 2, 3, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {1, 3, 9, -1, -1};
+		win = new int[] {4, 5, 6, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {1, 3, 5, -1, -1};
+		win = new int[] {7, 8, 9, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {8, 3, 5, -1, -1};
+		win = new int[] {7, 4, 1, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {1, 3, 9, -1, -1};
+		win = new int[] {5, 2, 8, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {1, 4, 5, -1, -1};
+		win = new int[] {3, 6, 9, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {1, 2, 4, -1, -1};
+		win = new int[] {7, 5, 3, -1, -1};
+		gameController.getCurrentPlayer().setMoves(lose);
+		gameController.getNextPlayer().setMoves(win);
+		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
+		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
+
+		lose = new int[] {2, 3, 4, -1, -1};
+		win = new int[] {9, 1, 5, -1, -1};
 		gameController.getCurrentPlayer().setMoves(lose);
 		gameController.getNextPlayer().setMoves(win);
 		Assertions.assertTrue(gameController.checkWin(gameController.getNextPlayer()));
 		Assertions.assertFalse(gameController.checkWin(gameController.getCurrentPlayer()));
 	}
+	
+	/**
+	 * Test to see resetGame resets the board, player's turns and moves properly
+	 */
 	@Test
 	void resetGame_resetsGameBoardTurnAndMovesAndResetCurrentPlayerToPlayer1() {
 		gameController = new GameController(new GameModel(), new GameView());
@@ -399,7 +454,11 @@ public class GameControllerTest {
 		Assertions.assertEquals( gameController.getGameModel().getPlayer1(), gameController.getCurrentPlayer());
 		Assertions.assertEquals(gameController.getGameModel().getPlayer2(), gameController.getNextPlayer());
 	}
-
+	
+	/**
+	 * Tests if makeAMoves will throw exception when player tries to switch player in middle of Game
+	 * @throws Exception cannot switch in middle of the game
+	 */
 	@Test
 	void makeAMove_throwsExceptionWhenPlayerTriesToSwitchInMiddleOfGame() throws Exception {
 		Player first = new Player(Letter.X);
@@ -429,7 +488,11 @@ public class GameControllerTest {
 			gameController.makeAMove('s');;
 		});
 	}
-
+	
+	/**
+	 * Tests if makeAMove adds score on the right player and accumulates correctly
+	 * @throws Exception
+	 */
 	@Test
 	void makeAMove_AddScoreWhenPlayerWins() throws Exception {
 		gameController = new GameController(new GameModel(), new GameView());
@@ -439,43 +502,43 @@ public class GameControllerTest {
 		gameController.makeAMove('2');
 		gameController.makeAMove('5');
 		gameController.makeAMove('3');
-		int scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer());
-		int scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer());
+		int scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer().getLetter().asLetter());
+		int scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer().getLetter().asLetter());
 		Assertions.assertEquals(1, scoreP1);
 		Assertions.assertEquals(0, scoreP2);
-		
+
 		gameController.makeAMove('s');
 		gameController.makeAMove('1');
 		gameController.makeAMove('4');
 		gameController.makeAMove('2');
 		gameController.makeAMove('5');
 		gameController.makeAMove('3');
-		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer());
-		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer());
+		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer().getLetter().asLetter());
+		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer().getLetter().asLetter());
 		Assertions.assertEquals(1, scoreP1);
 		Assertions.assertEquals(1, scoreP2);
-		
+
 		gameController.makeAMove('1');
 		gameController.makeAMove('4');
 		gameController.makeAMove('2');
 		gameController.makeAMove('5');
 		gameController.makeAMove('3');
-		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer());
-		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer());
+		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer().getLetter().asLetter());
+		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer().getLetter().asLetter());
 		Assertions.assertEquals(2, scoreP1);
 		Assertions.assertEquals(1, scoreP2);
-		
+
 		gameController.makeAMove('s');
 		gameController.makeAMove('1');
 		gameController.makeAMove('4');
 		gameController.makeAMove('2');
 		gameController.makeAMove('5');
 		gameController.makeAMove('3');
-		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer());
-		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer());
+		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer().getLetter().asLetter());
+		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer().getLetter().asLetter());
 		Assertions.assertEquals(2, scoreP1);
 		Assertions.assertEquals(2, scoreP2);
-		
+
 		gameController.makeAMove('s');
 		gameController.makeAMove('s');
 		gameController.makeAMove('1');
@@ -483,12 +546,16 @@ public class GameControllerTest {
 		gameController.makeAMove('2');
 		gameController.makeAMove('5');
 		gameController.makeAMove('3');
-		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer());
-		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer());
+		scoreP1 = gameController.getGameModel().getScores().get(gameController.getCurrentPlayer().getLetter().asLetter());
+		scoreP2 = gameController.getGameModel().getScores().get(gameController.getNextPlayer().getLetter().asLetter());
 		Assertions.assertEquals(3, scoreP1);
 		Assertions.assertEquals(2, scoreP2);
 	}
 	
+	/**
+	 * Tests if every move switches players 
+	 * @throws Exception
+	 */
 	@Test
 	void makeAMove_SwitchPlayerAfterEveryMoveOnTheBoard() throws Exception {
 		Player first = new Player(Letter.X);
@@ -497,32 +564,28 @@ public class GameControllerTest {
 
 		Assertions.assertEquals(first, gameController.getCurrentPlayer());
 		Assertions.assertEquals(second, gameController.getNextPlayer());
-		
+
 		gameController.makeAMove('1');
 		Assertions.assertEquals(first, gameController.getNextPlayer());
 		Assertions.assertEquals(second, gameController.getCurrentPlayer());
-		
+
 		gameController.makeAMove('2');
 		Assertions.assertEquals(first, gameController.getCurrentPlayer());
 		Assertions.assertEquals(second, gameController.getNextPlayer());
-		
+
 		gameController.makeAMove('3');
 		Assertions.assertEquals(first, gameController.getNextPlayer());
 		Assertions.assertEquals(second, gameController.getCurrentPlayer());
-		
+
 		gameController.makeAMove('4');
 		Assertions.assertEquals(first, gameController.getCurrentPlayer());
 		Assertions.assertEquals(second, gameController.getNextPlayer());
-		
+
 		gameController.makeAMove('5');
 		Assertions.assertEquals(first, gameController.getNextPlayer());
 		Assertions.assertEquals(second, gameController.getCurrentPlayer());
-		
+
 		gameController.makeAMove('6');
-		Assertions.assertEquals(first, gameController.getCurrentPlayer());
-		Assertions.assertEquals(second, gameController.getNextPlayer());
-		
-		gameController.makeAMove('7');
 		Assertions.assertEquals(first, gameController.getCurrentPlayer());
 		Assertions.assertEquals(second, gameController.getNextPlayer());
 	}

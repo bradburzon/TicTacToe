@@ -38,6 +38,8 @@ public class MainApp {
 				if (c != 'q') {
 					gameController.makeAMove(c);
 					play();
+				} else {
+					input.close();
 				}
 			}	
 		} catch (Exception e) {

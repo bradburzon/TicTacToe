@@ -13,16 +13,16 @@ public class GameModel {
 
 	private final Player player1;
 	private final Player player2;
-	private HashMap<Player, Integer> scores;
+	private HashMap<Character, Integer> scores;
 	private char[][] board; //need a board
 	private final String rulesAndHelp;
 
 	public GameModel(Player player1, Player player2) {
 		this.player1 = player1;  //seems like it will be better if I make a class Player with enum X and O member
 		this.player2 = player2;
-		scores = new HashMap<Player, Integer>();
-		scores.put(player1, 0);
-		scores.put(player2, 0);
+		scores = new HashMap<Character, Integer>();
+		scores.put(player1.getLetter().asLetter(), 0);
+		scores.put(player2.getLetter().asLetter(), 0);
 		rulesAndHelp = " \nTicTacToe"
 				+ "\nThe object of Tic Tac Toe is to get three in a row."
 				+ "\nYou play on a three by three game board. The first player"
@@ -59,7 +59,7 @@ public class GameModel {
 	/**
 	 * @return the scores
 	 */
-	public HashMap<Player, Integer> getScores() {
+	public HashMap<Character, Integer> getScores() {
 		return scores;
 	}
 

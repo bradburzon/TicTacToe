@@ -35,7 +35,7 @@ public class GameController {
 			move(Character.getNumericValue(move));
 			if(checkBoardStatus() == 1) {
 				gameView.printWinner(this, currentPlayer.getLetter().asLetter());
-				gameModel.getScores().put(getCurrentPlayer(), gameModel.getScores().get(getCurrentPlayer()) + 1);
+				gameModel.getScores().put(getCurrentPlayer().getLetter().asLetter(), gameModel.getScores().get(getCurrentPlayer().getLetter().asLetter()) + 1);
 				resetGame();
 			} else if(checkBoardStatus() == 2){
 				gameView.printTie();

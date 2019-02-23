@@ -46,8 +46,8 @@ public class GameView {
 	public void printScore(GameController gameController) {
 		char player1 = gameController.getGameModel().getPlayer1().getLetter().asLetter();
 		char player2 = gameController.getGameModel().getPlayer2().getLetter().asLetter();
-		String score = "Score: " + player1 + "-" + gameController.getGameModel().getScores().get(gameController.getGameModel().getPlayer1()) + " | " 
-				+ player2 + "-" + gameController.getGameModel().getScores().get(gameController.getGameModel().getPlayer2()) + "\n";
+		String score = "Score: " + player1 + "-" + gameController.getGameModel().getScores().get(gameController.getGameModel().getPlayer1().getLetter().asLetter()) + " | " 
+				+ player2 + "-" + gameController.getGameModel().getScores().get(gameController.getGameModel().getPlayer2().getLetter().asLetter()) + "\n";
 		System.out.print(score);
 	}
 
@@ -76,5 +76,19 @@ public class GameView {
 
 	public void printTie() {
 		System.out.println("***Game is TIED");
+	}
+	
+	public void printGameOver(GameController gameController) {
+		int x = gameController.getGameModel().getScores().get('X');
+		int o = gameController.getGameModel().getScores().get('O');
+		System.out.println("*** GAME OVER\n");
+		if(x > o) {
+			System.out.println("PLAYER X WINS");
+		} else if (o > x) {
+			System.out.println("PLAYER O WINS");
+		} else {
+			System.out.println("GAME IS TIED.");
+		}
+		System.out.println("\nTHANK YOU FOR PLAYING!\n");
 	}
 }
